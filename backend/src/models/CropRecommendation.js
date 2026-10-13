@@ -1,0 +1,5 @@
+import mongoose from 'mongoose';
+const schema = new mongoose.Schema({ user:{type:mongoose.Schema.Types.ObjectId,ref:'User',index:true}, requestId:{type:String, maxlength:80}, location:{type:String,required:true,maxlength:120}, soilType:{type:String,required:true}, season:{type:String}, temperature:Number, humidity:Number, soilPH:Number, rainfall:Number, waterAvailability:{type:String}, landArea:{type:Number,required:true,min:0}, areaUnit:{type:String,enum:['acres','hectares'],default:'acres'}, inputSnapshot:mongoose.Schema.Types.Mixed, recommendations:{type:[mongoose.Schema.Types.Mixed],required:true}, sourceMetadata:{weather:mongoose.Schema.Types.Mixed,weatherError:String,sources:[mongoose.Schema.Types.Mixed],limitations:[String],scoreMethod:String} },{timestamps:{createdAt:true,updatedAt:false}});
+schema.index({user:1,createdAt:-1});
+schema.index({user:1,requestId:1},{unique:true,partialFilterExpression:{requestId:{$type:'string'}}});
+export default mongoose.models.CropRecommendation || mongoose.model('CropRecommendation',schema);

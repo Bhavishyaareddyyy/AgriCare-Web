@@ -1,0 +1,2 @@
+import {weatherForLocation} from '../services/weather.js';
+export async function getWeather(req,res){if(typeof req.query.location!=='string'||!req.query.location.trim()||req.query.location.length>120)return res.status(400).json({success:false,error:{code:'INVALID_INPUT'}});try{res.json({success:true,data:await weatherForLocation(req.query.location)})}catch(e){res.status(503).json({success:false,error:{code:e.message==='LOCATION_NOT_FOUND'?'LOCATION_NOT_FOUND':'WEATHER_UNAVAILABLE'}})}}
