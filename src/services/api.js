@@ -1,7 +1,10 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const DEFAULT_API_BASE = import.meta.env.DEV
+  ? 'http://localhost:5000/api'
+  : 'https://agricare-web.onrender.com/api';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE).replace(/\/+$/, '');
 async function request(path, options = {}, timeoutMs = 20000) {
   let response;
-  try { response = await fetch(`${API_BASE}${path}`, { ...options, headers: { ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }), ...(localStorage.getItem('agricare-token') ? { Authorization: `Bearer ${localStorage.getItem('agricare-token')}` } : {}), ...options.headers }, signal: AbortSignal.timeout(timeoutMs) }); }
+  try { response = await fetch(`${API_BASE}/${path.replace(/^\/+/, '')}`, { ...options, headers: { ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }), ...(localStorage.getItem('agricare-token') ? { Authorization: `Bearer ${localStorage.getItem('agricare-token')}` } : {}), ...options.headers }, signal: AbortSignal.timeout(timeoutMs) }); }
   catch { throw new Error('API_UNAVAILABLE'); }
   const body = await response.json().catch(() => ({}));
   if (!response.ok || body.success === false) {

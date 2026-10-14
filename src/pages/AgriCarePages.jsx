@@ -416,7 +416,7 @@ export function Auth({ signup = false }) {
     } catch (failure) {
       setError(
         failure.message === 'API_UNAVAILABLE'
-          ? 'AgriCare could not reach the API at localhost:5000. Check that the backend is running.'
+          ? 'AgriCare could not reach the configured API. Check your connection and try again.'
           : failure.message || 'Unable to complete your request. Please try again.'
       );
     } finally {
